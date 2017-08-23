@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SensorTest</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_excel">导出excel表格</string>
 
     <string name="factory_main_fail">Fail</string>
     <string name="factory_main_retest">ReTest</string>
@@ -10,21 +10,19 @@
 
 
     <!-- G-Sensor test String -->
-    <string name="factory_item_name_gsensor_g_title">Data(m/s^2)</string>
-    <string name="factory_item_name_gsensor_g_vx">Vx = </string>
-    <string name="factory_item_name_gsensor_g_vy">Vy = </string>
-    <string name="factory_item_name_gsensor_g_vz">Vz = </string>
-    <string name="factory_item_name_gsensor_a_title">Rotation(。)</string>
-    <string name="factory_item_name_gsensor_a_x">SinX = </string>
-    <string name="factory_item_name_gsensor_a_y">SinY = </string>
-    <string name="factory_item_name_gsensor_a_z">SinZ = </string>
-
-    <string name="factory_auto_msensor_tv_x_result">Vx test result : </string>
-    <string name="factory_auto_msensor_tv_y_result">Vy test result : </string>
-    <string name="factory_auto_msensor_tv_z_result">Vz test result : </string>
+    <string name="msensor_deviation">误差值</string>
+    <string name="msensor_deviation_tip">最大响应时间误差(ms)：</string>
+    <string name="sure">确定</string>
 
 
-    <string name="factory_item_name_msensor_cal">Gyroscope cal Test</string>
-    <string name="factory_item_name_msensor">Gyroscope Test </string>
+    <string name="app_label">Compass</string>
+    <string name="getting_location">Getting location…</string>
+    <string name="cannot_get_location">Cannot get your location</string>
+    <string name="location_north">%s N</string>
+    <string name="location_south">%s S</string>
+    <string name="location_east">%s E</string>
+    <string name="location_west">%s W</string>
+    <string name="calibrate_success">校准完成</string>
+
 
 </resources>

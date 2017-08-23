@@ -5,24 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.Date;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class HSensorTest extends AppCompatActivity {
 
-    Button button, button2, button3;
+    Button btn_sure;
+    EditText et_deviation;
+    TextView tv_record, tv_status, tv_deviation;
 
-    private boolean isManualTest = false;
     private BroadcastReceiver mBroadcastReceiver;
     private IntentFilter intentFilter;
     int status = 0;
-    PowerManager.WakeLock wakeLock, wakeLock1;
-    PowerManager pm;
+
+    long deviation = 0;
+
+
+    StringBuilder stringBuilder = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,67 +39,84 @@ public class HSensorTest extends AppCompatActivity {
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
 
+        tv_record = (TextView) findViewById(R.id.tv_record);
+        tv_status = (TextView) findViewById(R.id.tv_status);
+        tv_deviation = (TextView) findViewById(R.id.tv_deviation);
+        et_deviation = (EditText) findViewById(R.id.et_deviation);
+        btn_sure = (Button) findViewById(R.id.btn_sure);
 
-        button = (Button) findViewById(R.id.button);
-        button2 = (Button) findViewById(R.id.button2);
-        button3 = (Button) findViewById(R.id.button3);
+        tv_deviation.setText("无最大误差值");
         mBroadcastReceiver = new HallSensorReceiver();
 
-        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Gank");
-        wakeLock1 = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Gank");
-
         registerReceiver(mBroadcastReceiver, intentFilter);
-        button3.setOnClickListener(new View.OnClickListener() {
+        btn_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!et_deviation.getText().toString().equals("")) {
+                    deviation = Long.parseLong(et_deviation.getText().toString());
+                    tv_deviation.setText("最大误差值：" + deviation + " ms");
+                } else {
+                    Snackbar.make(view, "请输入最大误差值", Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
-    long startonTime, startoffTime;
+    long startonTime, startOffTime;
 
     public void onLidstatusChanged(int lidstatus) {
         status = lidstatus;
         if (status == 0) {
-            button.setText("开盖=status：" + lidstatus);
             startonTime = System.currentTimeMillis();
+            tv_status.setText("开盖：status：" + lidstatus + "时间：" + startonTime);
         } else {
-            button.setText("合盖=status：" + lidstatus);
-            startoffTime = new Date().getTime();
+            startOffTime = System.currentTimeMillis();
+            tv_status.setText("合盖：status：" + lidstatus + "时间：" + startOffTime);
         }
     }
 
-    private void startjishi() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (status == 0) {
+            long time = System.currentTimeMillis() - startonTime;
+            showRecord(time, status);
+        }
+        Log.e("XXX", "亮屏..." + System.currentTimeMillis());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        SystemProperties.set("persist.sys.hallsensor.config", "0");
         onLidstatusChanged(status);
     }
 
     @Override
     protected void onStop() {
-//        SystemProperties.set("persist.sys.hallsensor.config", "1");
         super.onStop();
+        if (status == 1) {
+            long time = System.currentTimeMillis() - startOffTime;
+            showRecord(time, status);
+        }
+        Log.e("XXX", "灭屏..." + System.currentTimeMillis());
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-//        unregisterReceiver(mBroadcastReceiver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver);
+
     }
 
+
+    int k = 0;
 
     class HallSensorReceiver extends BroadcastReceiver {
         public int lidstatus;
@@ -103,21 +124,20 @@ public class HSensorTest extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
-                Log.e("XXX", pm.isInteractive() + "--");
-                if (status == 0) {
-                    button2.setText("开盖->亮屏的响应时间：" + ( System.currentTimeMillis() - startonTime));
-                }
-                Log.e("XXX", "亮屏啦，，" + System.currentTimeMillis());
-                Log.e("XXX", "响应时间" + ( System.currentTimeMillis() - startonTime));
-            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
-                Log.e("XXX", pm.isInteractive() + "--");
-                if (status == 1) {
-                    button2.setText("合盖->灭屏的响应时间：" + ( System.currentTimeMillis() - startoffTime));
-                }
-                Log.e("XXX", "灭屏啦，，" +  System.currentTimeMillis());
-                Log.e("XXX", "响应时间" + ( System.currentTimeMillis()- startoffTime));
-            }
+//            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+//                if (status == 0) {
+//                    long time = System.currentTimeMillis() - startonTime;
+//                    showRecord(time, status);
+//                }
+//                Log.e("XXX", "亮屏..." + System.currentTimeMillis());
+//
+//            } else if (Intent.ACTION_SCREEN_OFF.equals(intent.getAction())) {
+//                if (status == 1) {
+//                    long time = System.currentTimeMillis() - startOffTime;
+//                    showRecord(time, status);
+//                }
+//                Log.e("XXX", "灭屏..." + System.currentTimeMillis());
+//            }
             if (intent.getAction() != "factory_hallsensor_test") {
                 return;
             } else {
@@ -125,12 +145,20 @@ public class HSensorTest extends AppCompatActivity {
                 status = lidstatus;
                 if (HSensorTest.this != null) {
                     HSensorTest.this.onLidstatusChanged(lidstatus);
-                    android.util.Log.i("XXX", "lidstatus=" + lidstatus + "--" + System.currentTimeMillis());
                 }
-
-
             }
         }
+    }
+
+    String[] tt = new String[]{"开盖 -> 亮屏：", "合盖 -> 灭屏："};
+
+    private void showRecord(long time, int status) {
+        if (deviation > 0)
+            stringBuilder.insert(0, "test " + ++k + tt[status] + time + "\t 测试结果：" + (deviation > time) + "\n");
+        else {
+            stringBuilder.insert(0, "test " + ++k + tt[status] + time + "\n");
+        }
+        tv_record.setText(stringBuilder.toString());
     }
 
 }
