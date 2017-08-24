@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         mSensor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MSensorTest.class);
+                Intent intent = new Intent(MainActivity.this, CompassActivity.class);
                 startActivity(intent);
             }
         });

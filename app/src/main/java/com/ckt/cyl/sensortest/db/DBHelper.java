@@ -4,8 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.ckt.cyl.sensortest.db.SensorDbSchema.HSensorTable;
-import static com.ckt.cyl.sensortest.db.SensorDbSchema.MSensorTable;
+import static com.ckt.cyl.sensortest.db.SensorDbSchema.SensorTable;
 
 /**
  * Created by D22434 on 2017/8/22.
@@ -30,14 +29,12 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + MSensorTable.NAME + " ("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + SensorTable.MHSENSOR + " ("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MSensorTable.Cols.ANGLE + " , "
-                + MSensorTable.Cols.DEVIATION + " )");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + HSensorTable.NAME + " ("
-                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + HSensorTable.Cols.STATUS + " , "
-                + HSensorTable.Cols.INTERVAL + " interval)");
+                + SensorTable.Cols.TYPE + "  , "
+                + SensorTable.Cols.FIELD + " , "
+                + SensorTable.Cols.VALUE + " , "
+                + SensorTable.Cols.RESULT + " )");
     }
 
     @Override

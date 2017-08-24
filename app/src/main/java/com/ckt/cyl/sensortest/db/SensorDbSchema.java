@@ -6,25 +6,16 @@ package com.ckt.cyl.sensortest.db;
 
 public class SensorDbSchema {
 
-    public static final class MSensorTable {
-        public static final String NAME = "msensor";
+    public static final class SensorTable {
+        public static final String MHSENSOR = "mhsensor";
 
         public static final class Cols {
-
-            public static final String ANGLE = "angle";
-            public static final String DEVIATION = "deviation";
+            public static final String TYPE = "type";
+            public static final String FIELD = "field";
+            public static final String VALUE = "value";
+            public static final String RESULT = "result";
         }
 
     }
 
-    public static final class HSensorTable {
-        public static final String NAME = "hsensor";
-
-        public static final class Cols {
-
-            public static final String STATUS = "status";
-            public static final String INTERVAL = "interval";
-        }
-
-    }
 }

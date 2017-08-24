@@ -1,8 +1,11 @@
 package com.ckt.cyl.sensortest;
 
+import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
-import com.ckt.cyl.sensortest.bean.MSensor;
+import com.ckt.cyl.sensortest.bean.MHSensor;
+import com.ckt.cyl.sensortest.db.SensorLab;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -23,29 +26,37 @@ import java.util.List;
  */
 public class ExcelHelper {
 
-    private static String[] mySheet = new String[]{"MSensor", "HSensor"};
+    private static String[] test = new String[]{"参考角度", "状态"};
+    private static String[] value = new String[]{"偏差角度", "响应时间"};
 
     /**
      * 表格数据和SQLite中的要对应
      */
-    public static String createExcel(List<MSensor> sensorBeen) throws Exception {
+    public static String createExcel(Context context, int type, String filename) throws Exception {
         // 创建文档
         HSSFWorkbook workbook = new HSSFWorkbook();
 
-        HSSFSheet orientationSheet = workbook.createSheet(mySheet[0]);
-        int size = sensorBeen.size();
-//        if (size > 0) {
-//            for (short i = 0; i < size; i++) {
-//                MSensor orientationBean = sensorBeen.get(i);
-//                Object[] values = {orientationBean.getType(), orientationBean.getStatus(), orientationBean.getValues()};
-//                insertRow(orientationSheet, i, values, null);
-//            }
-//        }
+        HSSFSheet sheet = workbook.createSheet(filename);
 
+        List<MHSensor> sensors = SensorLab.get(context).getRecords(type);
 
+        Object[] v = {"ID", test[0], value[0], "测试结果"};
+        insertRow(sheet, (short) 0, v, null);
+        int size = sensors.size();
+        Log.d("xxx", size + "---");
+        if (size > 0) {
+            for (short i = 1; i <= size; i++) {
+                MHSensor sensor = sensors.get(i - 1);
+                Object[] values = {i,sensor.getField(), sensor.getValue(), sensor.isResult() ? "pass" : "fail"};
+                insertRow(sheet, i, values, null);
+            }
+        }
+
+        String ROOT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/SensorTest";
         // 保存文档
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensor_test";
-        File file = new File(dirPath, "sensor_test.xls");
+        new File(ROOT_PATH).mkdirs();
+        File file = new File(ROOT_PATH, filename + ".xls");
         FileOutputStream fos;
         if (!file.exists()) {
             file.createNewFile();
