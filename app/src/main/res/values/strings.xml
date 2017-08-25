@@ -2,13 +2,6 @@
     <string name="app_name">SensorTest</string>
     <string name="action_excel">导出excel表格</string>
 
-    <string name="factory_main_fail">Fail</string>
-    <string name="factory_main_retest">ReTest</string>
-    <string name="factory_main_pass">Pass</string>
-
-    <string name="factory_item_name_compass">Compass Test</string>
-
-
     <!-- G-Sensor test String -->
     <string name="msensor_deviation">误差值</string>
     <string name="msensor_deviation_tip">最大响应时间误差(ms)：</string>

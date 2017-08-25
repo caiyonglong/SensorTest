@@ -6,30 +6,26 @@
 
     <TextView
         android:id="@+id/tv_id"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="dd" />
+        android:text="100" />
 
     <TextView
         android:id="@+id/tv_test"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="dd" />
+        android:text="开盖到亮屏" />
 
     <TextView
         android:id="@+id/tv_value"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="dd" />
+        android:text="2.22235" />
 
 
     <TextView
         android:id="@+id/tv_result"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="dd" />
 </LinearLayout>

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.ckt.cyl.sensortest"
+        applicationId 'com.ckt.test.sensortest'
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -15,23 +15,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-
-    signingConfigs {
-        release {
-            storeFile file("../signApk/SignDemo.jks")
-            storePassword 'D22434'
-            keyAlias 'SignDemo'
-            keyPassword 'D22434'
-        }
-
-        debug {
-            storeFile file("../signApk/SignDemo.jks")
-            storePassword 'D22434'
-            keyAlias 'SignDemo'
-            keyPassword 'D22434'
         }
     }
 }
@@ -45,5 +28,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
+
     compile 'org.apache.poi:poi:3.17-beta1'
 }
