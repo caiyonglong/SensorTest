@@ -87,7 +87,7 @@ public class HallTestActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (PermissionUtils.verifyStoragePermissions(HallTestActivity.this)) {
                     try {
-                        String xx = ExcelHelper.createExcel(HallTestActivity.this, TYPE_HSENSOR, "霍尔传感器");
+                        String xx = ExcelHelper.createExcel(HallTestActivity.this, TYPE_HSENSOR);
                         Snackbar.make(view, "导出路径：" + xx, Snackbar.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -132,7 +132,7 @@ public class HallTestActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (status == 0) {
+        if (status == 0 && startOnTime != 0) {
             long time = System.currentTimeMillis() - startOnTime;
             showRecord(time, status);
         }
@@ -148,7 +148,7 @@ public class HallTestActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (status == 1) {
+        if (status == 1 && startOffTime != 0) {
             long time = System.currentTimeMillis() - startOffTime;
             showRecord(time, status);
         }
@@ -174,7 +174,6 @@ public class HallTestActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
 //            if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
 //                if (status == 0) {
 //                    long time = System.currentTimeMillis() - startOnTime;
@@ -204,7 +203,7 @@ public class HallTestActivity extends AppCompatActivity {
     private void showRecord(long time, int t) {
         MHSensor mhsensor;
 
-        if (deviation > 0)
+        if (deviation == 0)
             mhsensor = new MHSensor(TYPE_HSENSOR, state[t], time + "", true);
         else {
             mhsensor = new MHSensor(TYPE_HSENSOR, state[t], time + "", time <= deviation);

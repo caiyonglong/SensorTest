@@ -22,6 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     private List<MHSensor> mhSensors;
     private Context mContext;
 
+
     public MyAdapter(Context context, List<MHSensor> mhSensors) {
         mContext = context;
         this.mhSensors = mhSensors;
@@ -37,9 +38,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.mTvID.setText(position + 1 + "");
         holder.mTvTest.setText(mhSensors.get(position).getField());
         holder.mTvValue.setText(mhSensors.get(position).getValue() + "");
-        holder.mTvID.setText(position + 1 + "");
         holder.mTvResult.setText(mhSensors.get(position).isResult() ? "pass" : "fail");
     }
 

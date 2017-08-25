@@ -13,10 +13,12 @@ public class PermissionUtils {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.MOUNT_UNMOUNT_FILESYSTEMS",
             "android.permission.WRITE_EXTERNAL_STORAGE"};
 
 
     public static boolean verifyStoragePermissions(Activity activity) {
+
         try {
             //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,

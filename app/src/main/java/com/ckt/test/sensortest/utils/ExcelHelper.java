@@ -2,6 +2,7 @@ package com.ckt.test.sensortest.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import com.ckt.test.sensortest.bean.MHSensor;
 import com.ckt.test.sensortest.db.SensorLab;
@@ -14,7 +15,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +27,8 @@ public class ExcelHelper {
 
 
     private static String[][] items = {
-            {"ID", "参考角度", "偏差角度", "测试结果"},
-            {"ID", "保护套状态", "响应时间", "测试结果"}
+            {"ID", "参考角度", "偏差角度", "测试结果", "msensor"},
+            {"ID", "保护套状态", "响应时间", "测试结果", "hsensor"}
     };
 
 
@@ -36,16 +36,15 @@ public class ExcelHelper {
      * 导出MHSensor的excel表格
      *
      * @param context
-     * @param type     类型判断Sensor
-     * @param filename 文件名
+     * @param type    类型判断Sensor
      * @return
      * @throws Exception
      */
-    public static String createExcel(Context context, int type, String filename) throws Exception {
+    public static String createExcel(Context context, int type) throws Exception {
         // 创建文档
         HSSFWorkbook workbook = new HSSFWorkbook();
 
-        HSSFSheet sheet = workbook.createSheet(filename);
+        HSSFSheet sheet = workbook.createSheet(items[type][4]);
 
 
         List<MHSensor> sensors = SensorLab.get(context).getRecords(type);
@@ -55,6 +54,7 @@ public class ExcelHelper {
         insertRow(sheet, (short) 0, v, null);
 
         int size = sensors.size();
+        Log.e("XXX", sensors.size() + "");
         if (size > 0) {
             for (short i = 1; i <= size; i++) {
                 MHSensor sensor = sensors.get(i - 1);
@@ -62,25 +62,12 @@ public class ExcelHelper {
                 insertRow(sheet, i, values, null);
             }
         }
-
-        String ROOT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/SensorTest";
-        // 保存文档
-        new File(ROOT_PATH).mkdirs();
-        File file = new File(ROOT_PATH, filename + ".xls");
-        FileOutputStream fos;
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        fos = new FileOutputStream(file);
-        workbook.write(fos);
-        fos.close();
-        return file.getAbsolutePath();
+        return new FileUtils(context).saveFile(workbook, items[type][4] + ".xls");
     }
 
-    public static void deleteExcel(String filename) {
+    public static void deleteExcel(int type) {
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensor_test ";
-        File file = new File(dirPath, filename + ".xls");
+        File file = new File(dirPath, items[type][4] + ".xls");
         file.delete();
     }
 

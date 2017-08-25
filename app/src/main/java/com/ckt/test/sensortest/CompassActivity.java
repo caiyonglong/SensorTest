@@ -134,7 +134,7 @@ public class CompassActivity extends AppCompatActivity implements View.OnClickLi
         mBtnExport = (Button) findViewById(R.id.btn_export);
         mRvRecord = (RecyclerView) findViewById(R.id.rv_record);
 
-        sensorBeans = SensorLab.get(this).getRecords(Sensor.TYPE_MAGNETIC_FIELD);
+        sensorBeans = SensorLab.get(this).getRecords(SensorType.TYPE_MSENSOR);
         myAdapter = new MyAdapter(this, sensorBeans);
         mRvRecord.setLayoutManager(new LinearLayoutManager(this));
         mRvRecord.setAdapter(myAdapter);
@@ -204,7 +204,7 @@ public class CompassActivity extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.btn_clear:
                 sensorBeans.clear();
-                SensorLab.get(this).delete(Sensor.TYPE_MAGNETIC_FIELD);
+                SensorLab.get(this).delete(SensorType.TYPE_MSENSOR);
                 myAdapter.notifyDataSetChanged();
                 break;
             case R.id.btn_record:
@@ -217,7 +217,7 @@ public class CompassActivity extends AppCompatActivity implements View.OnClickLi
                     z = direction - angle;
                 z = Math.abs(z);
                 MHSensor bean =
-                        new MHSensor(Sensor.TYPE_MAGNETIC_FIELD, angle + "", z + "", z < 5);
+                        new MHSensor(SensorType.TYPE_MSENSOR, angle + "", z + "", z < 5);
                 sensorBeans.add(0, bean);
                 SensorLab.get(this).addRecord(bean);
                 myAdapter.notifyDataSetChanged();
@@ -232,7 +232,8 @@ public class CompassActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if (PermissionUtils.verifyStoragePermissions(CompassActivity.this)) {
                                     try {
-                                        String xx = ExcelHelper.createExcel(CompassActivity.this, SensorType.TYPE_MSENSOR, "磁力传感器");
+                                        String xx = ExcelHelper.createExcel(
+                                                CompassActivity.this, SensorType.TYPE_MSENSOR);
                                         Snackbar.make(view, "导出路径：" + xx, Snackbar.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -278,16 +279,6 @@ public class CompassActivity extends AppCompatActivity implements View.OnClickLi
         mTvReference.setText(angle + "");
         mTvCompass.setText(direction + "");
         updateCompassM(direction);
-    }
-
-    /**
-     * 更新记录显示
-     */
-    private void updateData() {
-        sensorBeans =
-                SensorLab.get(this).getRecords(Sensor.TYPE_MAGNETIC_FIELD);
-        myAdapter.setMhSensors(sensorBeans);
-        myAdapter.notifyDataSetChanged();
     }
 
 
